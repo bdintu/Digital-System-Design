@@ -1,0 +1,11 @@
+NET "S1" LOC = P44;
+NET "R1" LOC = P46;
+
+NET "S2" LOC = P47;
+NET "R2" LOC = P50;
+
+NET "Q1" LOC = P76;
+NET "Q1_Bar" LOC = P69;
+
+NET "Q2" LOC = P77;
+NET "Q2_Bar" LOC = P70;
