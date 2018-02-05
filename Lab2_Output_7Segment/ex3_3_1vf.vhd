@@ -2,14 +2,14 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity ex3_3_1vcxl is
+entity ex3_3_1vf is
 	Port(	E : in STD_LOGIC;
 			A : in STD_LOGIC_VECTOR (1 downto 0);
 			D : out STD_LOGIC_VECTOR (3 downto 0)
 	);
-end ex3_3_1vcxl;
+end ex3_3_1vf;
 
-architecture Behavioral of ex3_3_1vcxl is
+architecture Behavioral of ex3_3_1vf is
 begin
 
 	process(A, E)

@@ -2,21 +2,21 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity ex3_3 is
+entity ex3_3_3vf is
 	Port(	A, B	: in  STD_LOGIC_VECTOR (3 downto 0);
 			CLK	: in  STD_LOGIC;
 			COM	: out  STD_LOGIC_VECTOR (1 downto 0);  
          Y		: out  STD_LOGIC_VECTOR (6 downto 0)
 	);
-end ex3_3;
+end ex3_3_3vf;
 
-architecture Behavioral of ex3_3 is
+architecture Behavioral of ex3_3_3vf is
 	signal AB	: STD_LOGIC_VECTOR (4 downto 0);
 	signal X		: STD_LOGIC_VECTOR (3 downto 0);
 	signal fre_count : integer range 0 to 500000 := 0;
 
 begin
-	AB <= not(('0'&A) + ('0'&B));
+	AB <= ('0'&not(A)) + ('0'&not(B));
 
 	process(CLK)
 		begin

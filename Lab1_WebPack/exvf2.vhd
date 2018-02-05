@@ -9,7 +9,6 @@ entity exvf2 is
 end exvf2;
 
 architecture Behavioral of exvf2 is
-
 begin
 
 	C <= ('0'&A) + ('0'&B);
