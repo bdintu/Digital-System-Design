@@ -1,0 +1,11 @@
+NET "CLK" LOC = P127;
+
+NET "COM" LOC = P5;
+
+NET "Y[6]" LOC = P135;
+NET "Y[5]" LOC = P137;
+NET "Y[4]" LOC = P140;
+NET "Y[3]" LOC = P141;
+NET "Y[2]" LOC = P1;
+NET "Y[1]" LOC = P2;
+NET "Y[0]" LOC = P4;

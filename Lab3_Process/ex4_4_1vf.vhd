@@ -2,14 +2,14 @@ library IEEE;
 use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
-entity COUNTER_MOD_TEN_UP is
+entity ex4_4_1 is
 	Port(	CLK	: in  STD_LOGIC;
-			Y		: out  STD_LOGIC_VECTOR (6 downto 0);
+			Y	: out  STD_LOGIC_VECTOR (6 downto 0);
 			COM	: out  STD_LOGIC
 	);
-end COUNTER_MOD_TEN_UP;
+end ex4_4_1;
 
-architecture Behavioral of COUNTER_MOD_TEN_UP is
+architecture Behavioral of ex4_4_1 is
 	signal BCD			: STD_LOGIC_VECTOR (3 downto 0) := "0000";
 	signal fre_count	: integer range 0 to 1650000 := 0;
 
@@ -18,18 +18,19 @@ begin
 	process(CLK) is 
 	  begin
 
-			if clk'event and clk = '1' then
+			if CLK'event and CLK = '1' then
 				fre_count <= fre_count + 1;
 
 				if fre_count = 1 then
 					BCD <= BCD + 1;
 				end if;
 			end if;
-			
+
 			if (BCD = "1010") then
 				BCD <= "0000";
 			end if;
-	end process ;	
+
+	end process ;
 
 	Y <=	"1101111" when BCD = "1001" else -- 9
 			"1111111" when BCD = "1000" else -- 8
