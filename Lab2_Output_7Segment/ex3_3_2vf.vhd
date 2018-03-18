@@ -3,9 +3,9 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity ex3_3_2vf is
-	Port(	A		: in STD_LOGIC_VECTOR (1 downto 0);
+	Port(	A	: in STD_LOGIC_VECTOR (3 downto 0);
 			COM	: out STD_LOGIC;
-			Y		: out STD_LOGIC_VECTOR (6 downto 0)
+			Y	: out STD_LOGIC_VECTOR (6 downto 0)
 	);
 end ex3_3_2vf;
 

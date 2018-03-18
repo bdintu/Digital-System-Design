@@ -4,33 +4,35 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 
 entity ex3_3_3vf is
 	Port(	A, B	: in  STD_LOGIC_VECTOR (3 downto 0);
-			CLK	: in  STD_LOGIC;
-			COM	: out  STD_LOGIC_VECTOR (1 downto 0);  
-         Y		: out  STD_LOGIC_VECTOR (6 downto 0)
+			CLK		: in  STD_LOGIC;
+			COM		: out  STD_LOGIC_VECTOR (1 downto 0);
+			Y		: out  STD_LOGIC_VECTOR (6 downto 0)
 	);
 end ex3_3_3vf;
 
 architecture Behavioral of ex3_3_3vf is
-	signal AB	: STD_LOGIC_VECTOR (4 downto 0);
-	signal X		: STD_LOGIC_VECTOR (3 downto 0);
-	signal fre_count : integer range 0 to 500000 := 0;
+	signal SUM	: STD_LOGIC_VECTOR (4 downto 0);
+	signal X	: STD_LOGIC_VECTOR (3 downto 0);
+	signal fre_count : integer range 0 to 600000 := 0;
 
 begin
-	AB <= ('0'&not(A)) + ('0'&not(B));
+	SUM <= ('0'&not(A)) + ('0'&not(B));
 
 	process(CLK)
 		begin
-			
+
 		if (clk'event and clk='1') then
-			fre_count <= fre_count+1;
-			if fre_count<=250000 then
-				X <= AB(3 downto 0);
+			fre_count <= fre_count + 1;
+	
+			if fre_count <= 250000 then
+				X <= SUM(3 downto 0);
 				COM <= "10";
 			else
-				X <= "000"&AB(4);
+				X <= "000"&SUM(4);
 				COM <= "01";
 			end if;
 		end if;
+
 	end process;
 
 	Y <=	"1110001" when X = "1111" else -- F
@@ -49,5 +51,5 @@ begin
 			"1011011" when X = "0010" else -- 2
 			"0000110" when X = "0001" else -- 1
 			"0111111";
-			
+
 end Behavioral;
