@@ -1,0 +1,40 @@
+NET "A[7]" LOC = P15;
+NET "A[6]" LOC = P17;
+NET "A[5]" LOC = P18;
+NET "A[4]" LOC = P20;
+NET "A[3]" LOC = P21;
+NET "A[2]" LOC = P23;
+NET "A[1]" LOC = P24;
+NET "A[0]" LOC = P25;
+
+NET "DIP[4]" LOC = P56;
+NET "DIP[3]" LOC = P59;
+NET "DIP[2]" LOC = P60;
+NET "DIP[1]" LOC = P63;
+NET "DIP[0]" LOC = P68;
+
+NET "HAND_CLK" LOC = P8;
+
+NET "CLK" LOC = P127;
+
+NET "COM[1]" LOC = P6;
+NET "COM[0]" LOC = P5;
+
+NET "C[6]" LOC = P135;
+NET "C[5]" LOC = P137;
+NET "C[4]" LOC = P140;
+NET "C[3]" LOC = P141;
+NET "C[2]" LOC = P1;
+NET "C[1]" LOC = P2;
+NET "C[0]" LOC = P4;
+
+NET "LED[7]" LOC = P26;
+NET "LED[6]" LOC = P27;
+NET "LED[5]" LOC = P28;
+NET "LED[4]" LOC = P30;
+NET "LED[3]" LOC = P31;
+NET "LED[2]" LOC = P32;
+NET "LED[1]" LOC = P33;
+NET "LED[0]" LOC = P35;
+
+NET "BUZ" LOC = P123;
