@@ -4,12 +4,12 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity RTL is
-	generic (	sec_cycle : integer := 5000000;
+	generic (	sec_cycle : integer := 20000000;
 					digit_cycle : integer := 100000
 	);
 	Port(	CLK	: in  STD_LOGIC;
-			PB_H	: in STD_LOGIC;
 			PB_M	: in STD_LOGIC;
+			PB_H	: in STD_LOGIC;
 			SEG	: out STD_LOGIC_VECTOR (6 downto 0);
 			DOT	: out STD_LOGIC;
 			SEG_COM	: out STD_LOGIC_VECTOR (3 downto 0)
@@ -18,7 +18,9 @@ end RTL;
 
 architecture Behavioral of RTL is
 	signal sec_count	: integer range 0 to sec_cycle := 0;
-	signal digit_count: integer range 0 to digit_cycle := 0;
+	signal m_count		: integer range 0 to sec_cycle/2 := 2;
+	signal h_count		: integer range 0 to sec_cycle/2 := 2;
+	signal digit_count: integer range 0 to digit_cycle := 0;	
 
 	signal S0	: STD_LOGIC_VECTOR (3 downto 0) := "0000";
 	signal S1	: STD_LOGIC_VECTOR (3 downto 0) := "0000";
@@ -35,14 +37,30 @@ begin
 	  begin
 
 			if CLK'event and CLK = '1' then
+
 				sec_count <= sec_count + 1;
-				digit_count <= digit_count + 1;
-				
 				if sec_count = 1 then
 					S0 <= S0 + 1;
+				end if;
+				
+				if sec_count < sec_cycle/2 or PB_M = '1' or PB_H = '1' then
 					S_DOT <= '1';
-				elsif sec_count > sec_cycle/2 then
+				else
 					S_DOT <= '0';
+				end if;
+				
+				if PB_M = '1' then
+					m_count <= m_count + 1;
+				end if;	
+				if m_count = 1 then
+					M0 <= M0 + 1;
+				end if;
+				
+				if PB_H = '1' then
+					h_count <= h_count + 1;
+				end if;
+				if h_count = 1 then
+					H0 <= H0 + 1;
 				end if;
 
 				if S0 = "1010" then
@@ -60,10 +78,11 @@ begin
 				elsif H0 = "1010" then
 					H0 <= "0000";
 					H1 <= H1 + 1;
-				elsif H1 = "0111" then
+				elsif H1 = "0110" then
 					H1 <= "0000";
 				end if;
-				
+
+				digit_count <= digit_count + 1;				
 				if digit_count < digit_cycle/4 then
 					BCD <= M0;
 					DOT <= '0';
