@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity AlarmClock is
-	generic (	sec_cycle : integer := 20000000;
+	generic (	sec_cycle : integer := 25000000;
 					digit_cycle : integer := 200000;
 					pb_cycle : integer := 4000000
 	);
@@ -99,13 +99,17 @@ begin
 					S1 <= S1 + 1;
 				elsif S1 = "0110" then
 					S1 <= "0000";
-					M0 <= M0 + 1;
+					if PB_S = '0' then
+						M0 <= M0 + 1;
+					end if;
 				elsif M0 = "1010" then
 					M0 <= "0000";
 					M1 <= M1 + 1;
 				elsif M1 = "0110" then
 					M1 <= "0000";
-					H0 <= H0 + 1;
+					if PB_M = '0' then
+						H0 <= H0 + 1;
+					end if;
 				elsif H0 = "1010" then
 					H0 <= "0000";
 					H1 <= H1 + 1;
@@ -119,13 +123,17 @@ begin
 					AS1 <= AS1 + 1;
 				elsif AS1 = "0110" then
 					AS1 <= "0000";
-					AM0 <= AM0 + 1;
+					if PB_S = '0' then
+						AM0 <= AM0 + 1;
+					end if;	
 				elsif AM0 = "1010" then
 					AM0 <= "0000";
 					AM1 <= AM1 + 1;
 				elsif AM1 = "0110" then
 					AM1 <= "0000";
-					AH0 <= AH0 + 1;
+					if PB_M = '0' then
+						AH0 <= AH0 + 1;
+					end if;
 				elsif AH0 = "1010" then
 					AH0 <= "0000";
 					AH1 <= AH1 + 1;
