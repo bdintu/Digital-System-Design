@@ -4,7 +4,7 @@ use IEEE.STD_LOGIC_UNSIGNED.ALL;
 use IEEE.NUMERIC_STD.ALL;
 
 entity RTL is
-	generic (	sec_cycle : integer := 20000000;
+	generic (	sec_cycle : integer := 25000000;
 					digit_cycle : integer := 100000
 	);
 	Port(	CLK	: in  STD_LOGIC;
@@ -18,8 +18,8 @@ end RTL;
 
 architecture Behavioral of RTL is
 	signal sec_count	: integer range 0 to sec_cycle := 0;
-	signal m_count		: integer range 0 to sec_cycle/2 := 2;
-	signal h_count		: integer range 0 to sec_cycle/2 := 2;
+	signal m_count		: integer range 0 to sec_cycle/2 := 0;
+	signal h_count		: integer range 0 to sec_cycle/2 := 0;
 	signal digit_count: integer range 0 to digit_cycle := 0;	
 
 	signal S0	: STD_LOGIC_VECTOR (3 downto 0) := "0000";
@@ -52,15 +52,19 @@ begin
 				if PB_M = '1' then
 					m_count <= m_count + 1;
 				end if;	
-				if m_count = 1 then
+				if m_count = sec_cycle/2 then
 					M0 <= M0 + 1;
+					S0 <= "0000";
+					S1 <= "0000";
 				end if;
 				
 				if PB_H = '1' then
 					h_count <= h_count + 1;
 				end if;
-				if h_count = 1 then
+				if h_count = sec_cycle/2 then
 					H0 <= H0 + 1;
+					S0 <= "0000";
+					S1 <= "0000";
 				end if;
 
 				if S0 = "1010" then
@@ -74,11 +78,14 @@ begin
 					M1 <= M1 + 1;
 				elsif M1 = "0110" then
 					M1 <= "0000";
-					H0 <= H0 + 1;
+					if PB_M = '0' then 
+						H0 <= H0 + 1;
+					end if;
 				elsif H0 = "1010" then
 					H0 <= "0000";
 					H1 <= H1 + 1;
-				elsif H1 = "0110" then
+				elsif H1 = "0010" and H0 = "0100" then
+					H0 <= "0000";
 					H1 <= "0000";
 				end if;
 
