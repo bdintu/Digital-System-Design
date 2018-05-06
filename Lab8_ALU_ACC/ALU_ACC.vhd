@@ -3,80 +3,83 @@ use IEEE.STD_LOGIC_1164.ALL;
 use IEEE.STD_LOGIC_unsigned.ALL;
 
 entity ALU_ACC is
+	Generic ( CYCLE : integer := 250000
+	);
+
 	Port(	A		: in STD_LOGIC_VECTOR (7 downto 0);
-			DIP		: in STD_LOGIC_VECTOR (4 downto 0);
-			HAND_CLK	: in STD_LOGIC;
+			DIP	: in STD_LOGIC_VECTOR (4 downto 0);
+			ACT	: in STD_LOGIC;
 			CLK	: in STD_LOGIC;
 			COM	: out STD_LOGIC_VECTOR (1 downto 0);
-			C		: out STD_LOGIC_VECTOR (6 downto 0);
+			SEG	: out STD_LOGIC_VECTOR (6 downto 0);
 			LED	: out STD_LOGIC_VECTOR (7 downto 0);
 			BUZ	: out STD_LOGIC
-			 );
+	);
 end ALU_ACC;
 
 architecture Behavioral of ALU_ACC is
-	signal ACC	: STD_LOGIC_VECTOR (7 downto 0);
-	signal notA	: STD_LOGIC_VECTOR (7 downto 0);
-	signal add	: STD_LOGIC_VECTOR (7 downto 0);
-	signal sub	: STD_LOGIC_VECTOR (7 downto 0);
-	signal xoor	: STD_LOGIC_VECTOR (7 downto 0);
-	signal shl	: STD_LOGIC_VECTOR (7 downto 0);
- 
-	signal X	: STD_LOGIC_VECTOR (3 downto 0);
-	signal ANS	: STD_LOGIC_VECTOR (7 downto 0);
-	signal fre_count	: integer range (0) to (100000) := 0;
+	signal ACC	: STD_LOGIC_VECTOR (7 downto 0) := (others=>'0');
+	signal BCD	: STD_LOGIC_VECTOR (3 downto 0);
+	signal SEL	: STD_LOGIC := '0';
+	signal fre_count	: integer range (0) to (CYCLE) := 0;
 
 begin
 
-	notA	<= (not A);
-	add	<= ACC + (not A);
-	sub	<= ACC - (not A);
-	xoor	<= ACC xor (not A);
-	shl	<= ACC(6 downto 0) & '0';
+	alu : process(act) is
+		begin
 
-	ANS	<=	add when HAND_CLK = '1' and DIP(0) = '1' else 
-				sub when HAND_CLK = '1' and DIP(1) = '1' else
-				xoor when HAND_CLK = '1' and DIP(2) = '1' else
-				shl when HAND_CLK = '1' and DIP(3) = '1' else
-				notA when HAND_CLK = '1' and DIP(4) = '1' else
-				notA;
-				
-	ACC	<=	ANS when HAND_CLK = '1';
+		if (rising_edge(act)) then
+			if (DIP(0) = '0') then  -- Adder
+				ACC <= ACC + (not A);
+			elsif (DIP(1) = '0') then -- Subt
+				ACC <= ACC + (not A);
+			elsif (DIP(2) = '0') then -- XOR
+				ACC <= ACC xor (not A);
+			elsif (DIP(3) = '0') then -- SHL
+				ACC <= ACC(6 downto 0) & '0';
+			elsif (DIP(4) = '0') then -- SHL
+				ACC <= (not A);
+			end if;
+		end if;
 
-	BUZ	<= '1' when HAND_CLK = '1';
-	LED	<= ANS;
+	end process alu;
 
-	process(clk) is
+	BUZ	<= ACT;
+	LED	<= (not A);
+
+	u_count : process(clk) is
 		begin
 
 		if (rising_edge(clk)) then
 			fre_count <= fre_count  + 1;
-			if(fre_count  < 50000) then
-				X <= ANS(3 downto 0);
-				COM <= "10";
-			else
-				X <= ANS(7 downto 4);
-				COM <= "01";
+			if (fre_count  = CYCLE) then
+				SEL <= not SEL;
 			end if;
 		end if;
 
-	end process;
+	end process u_count;
 
-	C	<=	"1110001" when X = "1111" else -- F
-			"1111001" when X = "1110" else -- E
-			"1011110" when X = "1101" else -- D
-			"0111001" when X = "1100" else -- C
-			"1111100" when X = "1011" else -- B
-			"1110111" when X = "1010" else -- A
-			"1101111" when X = "1001" else -- 9
-			"1111111" when X = "1000" else -- 8
-			"0000111" when X = "0111" else -- 7
-			"1111101" when X = "0110" else -- 6
-			"1101101" when X = "0101" else -- 5
-			"1100110" when X = "0100" else -- 4
-			"1001111" when X = "0011" else -- 3
-			"1011011" when X = "0010" else -- 2
-			"0000110" when X = "0001" else -- 1
-			"0111111";
+	BCD <=	ACC(3 downto 0) when SEL = '0' else
+				ACC(7 downto 4);
+
+	SEG <=	"1110001" when BCD = "1111" else -- F
+				"1111001" when BCD = "1110" else -- E
+				"1011110" when BCD = "1101" else -- D
+				"0111001" when BCD = "1100" else -- C
+				"1111100" when BCD = "1011" else -- B
+				"1110111" when BCD = "1010" else -- A
+				"1101111" when BCD = "1001" else -- 9
+				"1111111" when BCD = "1000" else -- 8
+				"0000111" when BCD = "0111" else -- 7
+				"1111101" when BCD = "0110" else -- 6
+				"1101101" when BCD = "0101" else -- 5
+				"1100110" when BCD = "0100" else -- 4
+				"1001111" when BCD = "0011" else -- 3
+				"1011011" when BCD = "0010" else -- 2
+				"0000110" when BCD = "0001" else -- 1
+				"0111111";
+
+	COM(1) <= not SEL;
+	COM(0) <= SEL;
 
 end Behavioral;
