@@ -10,30 +10,24 @@ end ex6_2_1vf_tb;
 architecture behavior OF ex6_2_1vf_tb is
 
 	component ex6_2_1vf
-		Port(	A : IN  STD_LOGIC_VECTOR(3 downto 0);
-				B : IN  STD_LOGIC_VECTOR(3 downto 0);
-				C : OUT  STD_LOGIC_VECTOR(4 downto 0)
+		Port(	As, Bs	: IN  STD_LOGIC_VECTOR(3 downto 0);
+				Cs 		: OUT  STD_LOGIC_VECTOR(4 downto 0)
 		);
 	end component;
 
-	signal A : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
-	signal B : STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
-	signal C : STD_LOGIC_VECTOR(4 downto 0);
+	signal A, B	: STD_LOGIC_VECTOR(3 downto 0) := (others => '0');
+	signal C 	: STD_LOGIC_VECTOR(4 downto 0);
 
 begin
 
-	uut: ex6_2_1vf Port map(	A => A,
-								B => B,
-								C => C
-	);
+	uut: ex6_2_1vf Port map(As => A, Bs => B, Cs => C);
 
    process
 		file file_in	: TEXT open read_MODE is "Input_4_Bit_Adder.txt";
 		file file_out	: TEXT open WRITE_MODE is "Output_4_Bit_Adder.txt";
-		variable line_ABCin	: LINE;
-		variable line_Cout	: LINE;
-		variable Ain, Bin, Cin, Cout	: integer;
-		variable sum		: STD_LOGIC_VECTOR(4 downto 0);
+		variable line_ABCin, line_Cout	: LINE;
+		variable Ain, Bin, Cin, Cout		: integer;
+		variable sum	: STD_LOGIC_VECTOR(4 downto 0);
 
 	begin
 		while not ENDFILE(file_in) loop
@@ -391,6 +385,15 @@ begin
 				WRITE(line_Cout, string'("   *  ****"));
 				WRITELINE(file_out, line_Cout);
 			else
+				WRITE(line_Cout, string'("   *  ****"));
+				WRITELINE(file_out, line_Cout);
+				WRITE(line_Cout, string'("   *  *   "));
+				WRITELINE(file_out, line_Cout);
+				WRITE(line_Cout, string'("   *  ****"));
+				WRITELINE(file_out, line_Cout);
+				WRITE(line_Cout, string'("   *  *   "));
+				WRITELINE(file_out, line_Cout);
+				WRITE(line_Cout, string'("   *  *   "));			
 				WRITELINE(file_out, line_Cout);
 			end if;
 
